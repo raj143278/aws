@@ -1,0 +1,218 @@
+                                                 1.port conflict
+
+Issue Description         : port conflict
+Log file Name             :Server.log
+Log file location         :/opt/eap-7.1/standalone/log/server.log
+
+Error message             :11:13:04,030 ERROR [org.jboss.msc.service.fail] (MSC service thread 1-1) MSC000001: Failed to start service org.wildfly.undertow.listener.default:                           org.jboss.msc.service.StartException in service org.wildfly.undertow.listener.default: Address already in use /192.168.91.129:8080
+                          at org.wildfly.extension.undertow.ListenerService.start(ListenerService.java:179)
+                          at org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:2032)
+                          at org.jboss.msc.service.ServiceControllerImpl$StartTask.run(ServiceControllerImpl.java:1955)
+                          at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+                          at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+                          at java.lang.Thread.run(Thread.java:748)
+
+solution                 :In my environment first we need check which process is running for same port by using command:netstat -antp | grep java.Then I need to kill that process id using                          command:(kill -9 pid number) and we need to restart the server
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------                                                2 OUT OF MEMORY
+
+Issue description         :OUT OF MEMORY
+Log file name             :Server.log
+Log file location         :/opt/eap-7.1/standalone/log/server.log
+Error message             :11:44:57,330 ERROR [org.jboss.as.controller] (Controller Boot Thread) WFLYCTL0002: Error booting the container: java.lang.OutOfMemoryError: Java heap space
+
+Solution                  :In My environment to solve the out of memory error we have to change the heap size in standalone.conf line number 50 after change in heap size restart the server
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                      3.File not found exception
+
+
+Issue Description         :file not found expection
+Log file name             :server.log
+Log file Location         :/opt/eap-7.1/standalone/log/server.log
+Error message             :12:02:08,486 ERROR [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0055: Caught exception during boot:                                                     org.jboss.as.controller.persistence.ConfigurationPersistenceException: WFLYCTL0085: Failed to parse configuration
+                          at org.jboss.as.controller.persistence.XmlConfigurationPersister.load(XmlConfigurationPersister.java:145)
+                          at org.jboss.as.server.ServerService.boot(ServerService.java:387)
+                          at org.jboss.as.controller.AbstractControllerService$1.run(AbstractControllerService.java:370)
+                          at java.lang.Thread.run(Thread.java:748)
+                          Caused by: java.io.FileNotFoundException: /opt/eap-7.1/standalone/configuration/standalone.xml (No such file or directory)
+                          at java.io.FileInputStream.open0(Native Method)
+                          at java.io.FileInputStream.open(FileInputStream.java:195)
+                          at java.io.FileInputStream.<init>(FileInputStream.java:138)
+                          at org.jboss.as.controller.persistence.XmlConfigurationPersister.load(XmlConfigurationPersister.java:122)
+                          ... 3 more
+
+Solution                 :In My environment when ever we start the server by default it will read the standalone.xml if there is no standalone.xml file  in standalone configuration                              directory it will shows file not found exception  error.Then the replace in standalone.xml and restart the server 
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+					4.Wrong ip address
+
+Issue Descerption        : Start server in wrong ip address
+Log file name            :Server.log
+Log file location        :/opt/eap-7.1/standalone/log/server.log
+Error Message            : 12:19:25,014 ERROR [org.jboss.msc.service.fail] (MSC service thread 1-1) MSC000001: Failed to start service org.wildfly.network.interface.public:                                            org.jboss.msc.service.StartException in service org.wildfly.network.interface.public: WFLYSRV0082: failed to resolve interface public
+                         at org.jboss.as.server.services.net.NetworkInterfaceService.start(NetworkInterfaceService.java:96)
+                         at org.jboss.msc.service.ServiceControllerImpl$StartTask.startService(ServiceControllerImpl.java:2032)
+                         at org.jboss.msc.service.ServiceControllerImpl$StartTask.run(ServiceControllerImpl.java:1955)
+                         at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+                         at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+                         at java.lang.Thread.run(Thread.java:748)
+
+                         12:19:28,252 ERROR [org.jboss.as.controller.management-operation] (Controller Boot Thread) WFLYCTL0013: Operation ("add") failed - address: ([("interface" =>                         "public")]) - failure description: {"WFLYCTL0080: Failed services" => {"org.wildfly.network.interface.public" => "WFLYSRV0082: failed to resolve interface public"}}
+
+Solution                 :To solve this we need check ip address of the server and we restart the server
+
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                              5.Module not found expectioin
+
+Issue Description              : Module file not found exception
+Log file                       :Server.log
+Log file location              : /opt/eap-7.1/standalone/log/server.log
+Error message                  : org.jboss.modules.ModuleNotFoundException: org.jboss.as.standalone
+                                at org.jboss.modules.ModuleLoader.loadModule(ModuleLoader.java:285)
+                                at org.jboss.modules.Main.main(Main.java:399)
+Solution                       :In my environment check the modules file or there are not .if modules not the repalce the modules are restart the server
+
+ ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                 
+
+
+                                          6.Content file Missing 
+
+
+
+Issue Description             : Content file missing
+Log file                      :server log
+Log file location             :/opt/eap-7.1/standalone/log/server.log
+Error Message                  :12:49:12,228 ERROR [org.jboss.as.controller.management-operation] (Controller Boot Thread) WFLYCTL0013: Operation ("add") failed - address: ([("deployment"                                 => "supermarket.war")]) - failure description: "WFLYSRV0137: No deployment content with hash ab51e7b83bbff4da18b585b2a14d1f26dd2d4e48 is available in the                               deployment content repository for deployment 'supermarket.war'. This is a fatal boot error. To correct the problem, either restart with the --admin-only switch                               set and use the CLI to install the missing content or remove it from the configuration, or remove the deployment from the xml configuration file and restart."
+                             12:49:12,261 FATAL [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0056: Server boot has failed in an unrecoverable manner; exiting. See previous messages                             for details.
+
+Solution                    :If we deploy the application content file will created in /opt/eap-7.1/standalone/data/content/ab/file/ name under this location .if we delete content file                             manuallyb we will get the error No deployment content with hash.to solve the error we need replace the content file in same location and restart the server
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                                7.Parsing exception
+
+
+
+Issue Description                           :parsing expection
+Log file                                    :Server.log
+Log file location                           :/opt/eap-7.1/standalone/log/server.log
+Error message                               : 14:44:32,100 ERROR [org.jboss.as.controller] (Controller Boot Thread)
+
+                                             OPVDX001: Validation error in standalone.xml |  
+                                            |  1: <?xml version='1.0' encoding='UTF-8'?>
+					    |  2: ,,,,1234
+					    |     ^^^^ Unexpected character ',' (code 44) in prolog; expected '<'
+														
+
+                                            |  3: <server xmlns="urn:jboss:domain:5.0">
+                                            |  4:     <extensions>
+                                            |  5:         <extension module="org.jboss.as.clustering.infinispan"/>
+
+                                            | The primary underlying error message was:
+                                            | > Unexpected character ',' (code 44) in prolog; expected '<'
+                                            | >  at [row,col {unknown-source}]: [2,1]
+
+                                            |-------------------------------------------------------------------------------
+
+                                             14:44:32,111 ERROR [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0055: Caught exception during boot:                                             org.jboss.as.controller.persistence.ConfigurationPersistenceException: WFLYCTL0085: Failed to parse configuration
+                                            at org.jboss.as.controller.persistence.XmlConfigurationPersister.load(XmlConfigurationPersister.java:143)
+                                            at org.jboss.as.server.ServerService.boot(ServerService.java:387)
+                                            at org.jboss.as.controller.AbstractControllerService$1.run(AbstractControllerService.java:370)
+                                            at java.lang.Thread.run(Thread.java:748)
+
+                                            14:44:32,163 FATAL [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0056: Server boot has failed in an unrecoverable manner; exiting. See                                             previous messages for details.
+
+
+
+Solution                                  :  To slove the error we need  check correct xml file .Enter the correct values in standalone.xml file and remove unwanted values and restart                                             server
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+                                          8.  Port out of range
+
+
+
+Issue Description                      :Port out of range
+Log file                               :Server log
+Log file Location                      :/opt/eap-7.1/stanalone/log/server.log
+Error Message                           
+                                       :15:11:02,279 ERROR [org.jboss.as.controller.management-operation] (Controller Boot Thread) WFLYCTL0013: Operation ("add") failed - address: ([
+                                       ("socket-binding-group" => "standard-sockets")  
+                                      ("socket-binding" => "management-http")
+                                      ]) - failure description: "WFLYCTL0116: 100000 is an invalid value for parameter port. A maximum value of 65535 is required"
+
+                                      15:11:32,423 ERROR [org.jboss.as.controller.management-operation] (Controller Boot Thread) WFLYCTL0013: Operation ("add") failed - address: ([
+                                      ("core-service" => "management"),
+                                      ("management-interface" => "http-interface")
+                                       ]) - failure description: {
+                                     "WFLYCTL0412: Required services that are not installed:" => ["org.wildfly.network.socket-binding.management-http"],
+                                      "WFLYCTL0180: Services with missing/unavailable dependencies" => ["org.wildfly.management.http.extensible is missing [org.wildfly.network.socket  
+                                     -binding.management-http]"]
+                                      } 
+                                     15:11:32,427 ERROR [org.jboss.as.controller.management-operation] (Controller Boot Thread) WFLYCTL0013: Operation ("add") failed - address: ([
+                                     ("core-service" => "management"),
+                                     ("management-interface" => "http-interface")
+                                     ]) - failure description: {
+                                    "WFLYCTL0412: Required services that are not installed:" => ["org.wildfly.network.socket-binding.management-http"],
+                                    "WFLYCTL0180: Services with missing/unavailable dependencies" => ["org.wildfly.management.http.extensible is missing [org.wildfly.network.socket-                                    binding.management-http]"]
+
+
+                                    15:11:32,862 ERROR [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0022: Deploy of deployment "supermarket.war" was rolled back with no failure                                    message
+
+Solution                            :To solve this we need check port range of server and we need given below the port range. Jboss port range :65535 and we add correct port of range and                                    restart the server
+ 
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                               9.invalid Username and Db port number
+
+Issue Description                           : Invalid username and Db port number
+
+Log file                                    : server.log
+Log file Location                           :/opt/eap-7.1/standalone/log/server.log
+Error message                               :15:23:47,351 ERROR [org.jboss.as.controller.management-operation] (External Management Request Threads -- 8) WFLYCTL0013: Operation ("add")                                             failed - address: ([
+                                            ("subsystem" => "datasources"),
+                                            ("data-source" => "OracleDS_test 1")
+                                            ]) - failure description: {
+                                            "WFLYCTL0412: Required services that are not installed:" => ["jboss.jdbc-driver.oracle"],
+
+                                            "WFLYCTL0180: Services with missing/unavailable dependencies" => [
+                                            "jboss.driver-demander.\"java:/OracleDS_test 1\" is missing [jboss.jdbc-driver.oracle]",
+                                            "org.wildfly.data-source.\"OracleDS_test 1\" is missing [jboss.jdbc-driver.oracle]"
+                                            ]
+                                            }
+
+solution                                   : To be check Db username and password before test connection 
+
+_________----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                                        10. Invalid Db port
+ 
+Issue Description                                 : invalid Db port
+Log file                                          :Server log
+Log file Location                                 :/opt/eap-7.1/standalone/log/server.log
+Error message                                     :  Internal Server Error
+                                                  {
+                                                  "outcome" => "failed",
+                                                  "failure-description" => {
+                                                  "WFLYCTL0412: Required services that are not installed:" => ["jboss.jdbc-driver.oracle"],
+                                                   "WFLYCTL0180: Services with missing/unavailable dependencies" => [
+                                                   "jboss.driver-demander.\"java:/OracleDS_test 1\" is missing [jboss.jdbc-driver.oracle]",
+                                                    "org.wildfly.data-source.\"OracleDS_test 1\" is missing [jboss.jdbc-driver.oracle]"
+        ]
+                                                  },  
+                                               "rolled-back" => true
+                                               }
+
+
+Solution                                       : we need check the Db port number  before test connection 
+
+
+                                                                                                                                                                            
+--------------------==========================================================================================================================================================================
